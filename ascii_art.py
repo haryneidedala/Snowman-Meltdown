@@ -1,3 +1,4 @@
+# ascii_art.py
 STAGES = [
     # Stage 0: Full snowman (0 mistakes)
     """

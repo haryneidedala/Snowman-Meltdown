@@ -2,6 +2,7 @@
 import random
 from ascii_art import STAGES
 
+
 # List of secret words
 WORDS = ["python", "git", "github", "snowman", "meltdown"]
 
@@ -11,19 +12,27 @@ def get_random_word():
 
 def display_game_state(mistakes, secret_word, guessed_letters):
     """Displays current game state including snowman stage and word progress."""
-    # Show appropriate snowman stage
-    print(STAGES[mistakes])
+    # Clear screen for better readability
+    print("\033c", end="")  # Clear terminal (works on most systems)
     
-    # Display secret word with underscores for unguessed letters
+    # Show appropriate snowman stage with border
+    print("=" * 40)
+    print("SNOWMAN STATUS:")
+    print(STAGES[mistakes])
+    print("=" * 40)
+    
+    # Display secret word with formatting
     display_word = ""
     for letter in secret_word:
         if letter in guessed_letters:
-            display_word += letter + " "
+            display_word += f"\033[1;32m{letter}\033[0m "  # Green for correct
         else:
             display_word += "_ "
-    print("Word:", display_word.strip())
+    
+    print(f"\nWORD: {display_word.strip()}")
     print(f"Mistakes: {mistakes}/{len(STAGES)-1}")
-    print("Guessed letters:", ", ".join(sorted(guessed_letters)))
+    print(f"Guessed letters: {', '.join(sorted(guessed_letters))}")
+    print("-" * 40)
 
 def is_word_guessed(secret_word, guessed_letters):
     """Check if all letters in secret word have been guessed."""
@@ -45,15 +54,15 @@ def play_game():
         
         # Get valid input
         while True:
-            guess = input("Guess a letter: ").lower()
-            if len(guess) != 1:
-                print("Please enter exactly one letter.")
-            elif not guess.isalpha():
-                print("Please enter a valid letter (a-z).")
-            elif guess in guessed_letters:
-                print("You've already guessed that letter.")
-            else:
-                break
+                guess = input("Guess a letter: ").strip().lower()
+                if len(guess) != 1:
+                    print("Please enter exactly one character.")
+                elif not guess.isalpha():
+                    print("Please enter a letter from A-Z.")
+                elif guess in guessed_letters:
+                    print("You've already guessed that letter. Try another.")
+                else:
+                    break
         
         # Process new guess
         guessed_letters.append(guess)
